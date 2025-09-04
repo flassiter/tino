@@ -16,7 +16,7 @@ class CursorTracker:
     coordinates, with utilities for cursor movement operations.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize cursor tracker."""
         self._line: int = 0
         self._column: int = 0  

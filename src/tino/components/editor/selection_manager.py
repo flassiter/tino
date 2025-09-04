@@ -17,7 +17,7 @@ class SelectionManager:
     coordinate systems.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize selection manager."""
         self._start: int = 0
         self._end: int = 0

@@ -112,7 +112,9 @@ class EncodingDetector:
             
             if result and result.get('encoding'):
                 confidence = result.get('confidence', 0.0)
-                encoding = result['encoding'].lower()
+                raw_encoding = result['encoding']
+                if raw_encoding is not None:
+                    encoding = raw_encoding.lower()
                 
                 logger.debug(f"Chardet result: {encoding} (confidence: {confidence:.2f})")
                 
@@ -199,8 +201,10 @@ class EncodingDetector:
             result = chardet.detect(data)
             if result and result.get('encoding'):
                 confidence = result.get('confidence', 0.0)
-                encoding = self._normalize_encoding_name(result['encoding'])
-                return encoding, confidence
+                raw_encoding = result['encoding']
+                if raw_encoding is not None:
+                    encoding = self._normalize_encoding_name(raw_encoding)
+                    return encoding, confidence
         except Exception:
             pass
         

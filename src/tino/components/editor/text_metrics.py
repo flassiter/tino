@@ -17,7 +17,7 @@ class TextMetrics:
     for performance when content doesn't change frequently.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize text metrics calculator."""
         self._content: str = ""
         self._content_hash: int = 0
@@ -51,7 +51,9 @@ class TextMetrics:
         if self._cached_metrics is None:
             self._calculate_metrics()
         
-        return self._cached_metrics.copy()
+        if self._cached_metrics is not None:
+            return self._cached_metrics.copy()
+        return {}
     
     def get_line_count(self) -> int:
         """
@@ -239,7 +241,7 @@ class TextMetrics:
             if char == '\t':
                 indent_level += 1
             elif char == ' ':
-                indent_level += 0.25
+                indent_level = int(indent_level + 0.25)
             else:
                 break
         

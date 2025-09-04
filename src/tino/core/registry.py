@@ -126,14 +126,14 @@ class ComponentRegistry:
                 instance = self._singleton_instances[name]
                 if component_type and not isinstance(instance, component_type):
                     raise TypeError(f"Component {name} is not of type {component_type}")
-                return instance
+                return instance  # type: ignore[return-value]
             
             # Return existing non-singleton instance
             if name in self._components:
                 instance = self._components[name]
                 if component_type and not isinstance(instance, component_type):
                     raise TypeError(f"Component {name} is not of type {component_type}")
-                return instance
+                return instance  # type: ignore[return-value]
             
             # Create new instance
             return self._create_component(name, component_type)
@@ -152,7 +152,7 @@ class ComponentRegistry:
             start_time = time.time()
             
             # Create dependency instances first
-            dependency_instances = {}
+            dependency_instances: Dict[str, Any] = {}
             for dep_name in self._dependencies[name]:
                 dependency_instances[dep_name] = self.get_component(dep_name)
             
@@ -400,7 +400,7 @@ class ComponentRegistry:
             'dependents': list(self._dependents[name]),
             'loaded': self.is_loaded(name),
             'singleton': name in self._singleton_instances,
-            'factory': self._factories[name].__name__ if self._factories[name] else None
+            'factory': self._factories[name].__name__ if self._factories.get(name) else None
         }
     
     def validate_dependencies(self) -> List[str]:
@@ -473,11 +473,11 @@ if __name__ == "__main__":
     
     # Example component classes
     class DatabaseConnection:
-        def __init__(self):
+        def __init__(self) -> None:
             self.connected = False
             print("DatabaseConnection created")
         
-        def connect(self):
+        def connect(self) -> None:
             self.connected = True
             print("Database connected")
     
@@ -486,7 +486,7 @@ if __name__ == "__main__":
             self.database = database
             print("UserService created with database dependency")
         
-        def get_users(self):
+        def get_users(self) -> List[str]:
             if self.database.connected:
                 return ["Alice", "Bob", "Charlie"]
             return []

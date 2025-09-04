@@ -52,4 +52,4 @@ class CommandCategory(Enum):
             self.TOOLS: 6,
             self.HELP: 7,
         }
-        return order.get(self, 99)
+        return order.get(self, 99)  # type: ignore[no-any-return,call-overload]

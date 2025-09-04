@@ -9,7 +9,7 @@ import logging
 import threading
 from collections import OrderedDict
 from pathlib import Path
-from typing import List, Optional
+from typing import Iterator, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -275,7 +275,7 @@ class RecentFilesManager:
         """Check if a file is in the recent files list."""
         return self.contains(file_path)
     
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Path]:
         """Iterate over recent files, most recent first."""
         with self._lock:
             return iter(list(self._files.keys()))

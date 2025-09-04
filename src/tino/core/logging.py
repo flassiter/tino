@@ -19,13 +19,13 @@ try:
 except ImportError:
     # Fallback if platformdirs not available
     import os
-    def user_log_dir(appname: str) -> str:
+    def user_log_dir(appname: str) -> str:  # type: ignore[misc]
         if sys.platform == "win32":
             return os.path.join(os.environ.get("LOCALAPPDATA", ""), appname, "logs")
         else:
             return os.path.join(os.path.expanduser("~"), ".local", "share", appname, "logs")
     
-    def user_cache_dir(appname: str) -> str:
+    def user_cache_dir(appname: str) -> str:  # type: ignore[misc]
         if sys.platform == "win32":
             return os.path.join(os.environ.get("LOCALAPPDATA", ""), appname, "cache")
         else:
@@ -288,7 +288,7 @@ class TinoLogger:
         Returns:
             List of log file paths
         """
-        log_files = []
+        log_files: List[Path] = []
         if self.log_dir.exists():
             log_files.extend(self.log_dir.glob("*.log*"))
         return sorted(log_files)
@@ -355,7 +355,7 @@ def get_logger(name: str) -> logging.Logger:
     return _default_logger.get_logger(name)
 
 
-def configure_logging(**kwargs) -> TinoLogger:
+def configure_logging(**kwargs: Any) -> TinoLogger:
     """
     Configure the default logging system.
     
@@ -395,15 +395,15 @@ class LogLevel:
         """
         self.new_level = getattr(logging, level.upper())
         self.logger = logging.getLogger(logger_name) if logger_name else logging.getLogger()
-        self.old_level = None
+        self.old_level: Optional[int] = None
     
-    def __enter__(self):
+    def __enter__(self) -> 'LogLevel':
         """Enter context and change log level."""
         self.old_level = self.logger.level
         self.logger.setLevel(self.new_level)
         return self
     
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """Exit context and restore original log level."""
         if self.old_level is not None:
             self.logger.setLevel(self.old_level)

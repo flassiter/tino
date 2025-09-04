@@ -148,7 +148,7 @@ class EventBus:
                             )
                 else:
                     # Synchronous handler
-                    self._safe_sync_handler(handler, event)
+                    self._safe_sync_handler(handler, event)  # type: ignore[arg-type]
             except Exception as e:
                 logger.error(
                     f"Error handling event {type(event).__name__} "
@@ -178,14 +178,10 @@ class EventBus:
             if asyncio.iscoroutinefunction(handler):
                 tasks.append(self._safe_async_handler(handler, event))
             else:
-                # Run sync handlers in executor to avoid blocking
-                loop = asyncio.get_event_loop()
-                tasks.append(
-                    loop.run_in_executor(
-                        None, 
-                        lambda: self._safe_sync_handler(handler, event)
-                    )
-                )
+                # Create async wrapper for sync handler
+                async def sync_wrapper() -> None:
+                    self._safe_sync_handler(handler, event)  # type: ignore[arg-type]
+                tasks.append(sync_wrapper())
         
         if tasks:
             await asyncio.gather(*tasks, return_exceptions=True)

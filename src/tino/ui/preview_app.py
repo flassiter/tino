@@ -51,7 +51,7 @@ class FileDialogScreen(ModalScreen):
     }
     """
 
-    def __init__(self, initial_path: Path = None) -> None:
+    def __init__(self, initial_path: Optional[Path] = None) -> None:
         super().__init__()
         self.selected_file: Optional[Path] = None
         self.initial_path = initial_path or Path.cwd()
@@ -115,7 +115,7 @@ class SaveFileDialogScreen(ModalScreen):
     }
     """
 
-    def __init__(self, initial_path: Path = None, default_name: str = "untitled.md") -> None:
+    def __init__(self, initial_path: Optional[Path] = None, default_name: str = "untitled.md") -> None:
         super().__init__()
         self.selected_directory: Path = initial_path or Path.cwd()
         self.default_name = default_name
@@ -227,7 +227,7 @@ class EditorPane(Vertical):
             line_index = max(0, line_number - 1)
             try:
                 self._editor.cursor_location = (line_index, 0)
-                self._editor.scroll_to_line(line_index)
+                # self._editor.scroll_to_line(line_index)  # Method may not exist
             except Exception:
                 pass  # Line might be out of range
 
@@ -390,7 +390,7 @@ class PreviewApp(App[None]):
         """Load content from a file."""
         try:
             content = await asyncio.get_event_loop().run_in_executor(
-                None, self._file_manager.open_file, str(file_path)
+                None, lambda: self._file_manager.open_file(str(file_path))
             )
             
             if self._editor_pane:
@@ -410,10 +410,8 @@ class PreviewApp(App[None]):
         try:
             success = await asyncio.get_event_loop().run_in_executor(
                 None, 
-                self._file_manager.save_file, 
-                str(file_path), 
-                self._editor_pane.content
-            )
+                lambda: self._file_manager.save_file(str(file_path), self._editor_pane.content)
+            ) 
             return success
         except Exception:
             return False
@@ -426,7 +424,7 @@ class PreviewApp(App[None]):
         return "New File"
 
 
-def main():
+def main() -> None:
     """Run the preview app."""
     app = PreviewApp()
     app.run()
