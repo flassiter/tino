@@ -12,7 +12,7 @@ from .renderer import IRenderer
 
 __all__ = [
     "ICommand",
-    "IEditor", 
+    "IEditor",
     "IFileManager",
     "IRenderer",
 ]

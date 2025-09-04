@@ -1,7 +1,7 @@
 """
 Tino - Terminal Interactive Nano-like Organizer
 
-A modern TUI editor optimized for markdown documentation with secondary support 
+A modern TUI editor optimized for markdown documentation with secondary support
 for configuration files and scripts.
 """
 

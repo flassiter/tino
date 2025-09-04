@@ -5,27 +5,26 @@ All events inherit from the base Event class and include timestamp and source
 information for debugging and tracing.
 """
 
-import asyncio
-from abc import ABC
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional, Tuple
+from typing import Any
 
 
 @dataclass
-class Event(ABC):
+class Event:
     """Base class for all events in the system."""
-    
+
     timestamp: datetime = field(default_factory=datetime.now)
     source: str = field(default="unknown")
     event_id: str = field(default_factory=lambda: f"evt_{id(object())}")
-    
+
     def __post_init__(self) -> None:
         """Ensure event is properly initialized."""
         if not self.source or self.source == "unknown":
             # Try to determine source from call stack
             import inspect
+
             frame = inspect.currentframe()
             if frame and frame.f_back and frame.f_back.f_back:
                 caller = frame.f_back.f_back
@@ -35,7 +34,7 @@ class Event(ABC):
 @dataclass
 class TextChangedEvent(Event):
     """Fired when text content changes in the editor."""
-    
+
     content: str = ""
     old_content: str = ""
     change_type: str = "unknown"  # "insert", "delete", "replace"
@@ -46,8 +45,8 @@ class TextChangedEvent(Event):
 @dataclass
 class FileOpenedEvent(Event):
     """Fired when a file is opened."""
-    
-    file_path: Optional[Path] = None
+
+    file_path: Path | None = None
     encoding: str = "utf-8"
     size: int = 0
     modified: bool = False
@@ -56,8 +55,8 @@ class FileOpenedEvent(Event):
 @dataclass
 class FileSavedEvent(Event):
     """Fired when a file is saved."""
-    
-    file_path: Optional[Path] = None
+
+    file_path: Path | None = None
     size: int = 0
     encoding: str = "utf-8"
     backup_created: bool = False
@@ -66,8 +65,8 @@ class FileSavedEvent(Event):
 @dataclass
 class FileClosedEvent(Event):
     """Fired when a file is closed."""
-    
-    file_path: Optional[Path] = None
+
+    file_path: Path | None = None
     was_modified: bool = False
     saved: bool = False
 
@@ -75,7 +74,7 @@ class FileClosedEvent(Event):
 @dataclass
 class SelectionChangedEvent(Event):
     """Fired when text selection changes."""
-    
+
     start: int = 0
     end: int = 0
     selected_text: str = ""
@@ -84,7 +83,7 @@ class SelectionChangedEvent(Event):
 @dataclass
 class CursorMovedEvent(Event):
     """Fired when cursor position changes."""
-    
+
     line: int = 0
     column: int = 0
     position: int = 0
@@ -96,7 +95,7 @@ class CursorMovedEvent(Event):
 @dataclass
 class ComponentLoadedEvent(Event):
     """Fired when a component is loaded."""
-    
+
     component_name: str = ""
     component_type: str = ""
     load_time_ms: float = 0.0
@@ -105,7 +104,7 @@ class ComponentLoadedEvent(Event):
 @dataclass
 class ComponentUnloadedEvent(Event):
     """Fired when a component is unloaded."""
-    
+
     component_name: str = ""
     component_type: str = ""
     unload_time_ms: float = 0.0
@@ -114,7 +113,7 @@ class ComponentUnloadedEvent(Event):
 @dataclass
 class SearchEvent(Event):
     """Fired when a search operation is performed."""
-    
+
     pattern: str = ""
     case_sensitive: bool = False
     whole_word: bool = False
@@ -125,7 +124,7 @@ class SearchEvent(Event):
 @dataclass
 class ReplaceEvent(Event):
     """Fired when a replace operation is performed."""
-    
+
     pattern: str = ""
     replacement: str = ""
     replacements_made: int = 0
@@ -136,7 +135,7 @@ class ReplaceEvent(Event):
 @dataclass
 class CommandExecutedEvent(Event):
     """Fired when a command is executed successfully."""
-    
+
     command_name: str = ""
     args: tuple = field(default_factory=tuple)
     kwargs: dict[str, Any] = field(default_factory=dict)
@@ -146,7 +145,7 @@ class CommandExecutedEvent(Event):
 @dataclass
 class CommandFailedEvent(Event):
     """Fired when a command execution fails."""
-    
+
     command_name: str = ""
     error_message: str = ""
     args: tuple = field(default_factory=tuple)

@@ -7,24 +7,24 @@ components to communicate without direct dependencies.
 
 from .bus import EventBus
 from .types import (
-    Event,
-    TextChangedEvent,
-    FileOpenedEvent,
-    FileSavedEvent,
-    FileClosedEvent,
-    SelectionChangedEvent,
-    CursorMovedEvent,
+    CommandExecutedEvent,
     ComponentLoadedEvent,
     ComponentUnloadedEvent,
-    SearchEvent,
+    CursorMovedEvent,
+    Event,
+    FileClosedEvent,
+    FileOpenedEvent,
+    FileSavedEvent,
     ReplaceEvent,
-    CommandExecutedEvent,
+    SearchEvent,
+    SelectionChangedEvent,
+    TextChangedEvent,
 )
 
 __all__ = [
     "EventBus",
     "Event",
-    "TextChangedEvent", 
+    "TextChangedEvent",
     "FileOpenedEvent",
     "FileSavedEvent",
     "FileClosedEvent",
@@ -33,6 +33,6 @@ __all__ = [
     "ComponentLoadedEvent",
     "ComponentUnloadedEvent",
     "SearchEvent",
-    "ReplaceEvent", 
+    "ReplaceEvent",
     "CommandExecutedEvent",
 ]

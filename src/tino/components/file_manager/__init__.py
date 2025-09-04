@@ -5,16 +5,16 @@ Provides file I/O operations including atomic saves, backup management,
 encoding detection, recent files tracking, and cursor position memory.
 """
 
-from .file_manager import FileManager
 from .backup_manager import BackupManager
-from .encoding_detector import EncodingDetector
-from .recent_files import RecentFilesManager
 from .cursor_memory import CursorMemory
+from .encoding_detector import EncodingDetector
+from .file_manager import FileManager
 from .mock import MockFileManager
+from .recent_files import RecentFilesManager
 
 __all__ = [
     "FileManager",
-    "BackupManager", 
+    "BackupManager",
     "EncodingDetector",
     "RecentFilesManager",
     "CursorMemory",

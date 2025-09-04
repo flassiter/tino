@@ -9,14 +9,14 @@ This package implements the command system for the tino editor, providing:
 - Quick file switching functionality
 """
 
-from .command_base import BaseCommand
-from .registry import CommandRegistry
-from .keybindings import KeybindingManager
 from .categories import CommandCategory
+from .command_base import BaseCommand
+from .keybindings import KeybindingManager
+from .registry import CommandRegistry
 
 __all__ = [
-    'BaseCommand',
-    'CommandRegistry', 
-    'KeybindingManager',
-    'CommandCategory',
+    "BaseCommand",
+    "CommandRegistry",
+    "KeybindingManager",
+    "CommandCategory",
 ]
